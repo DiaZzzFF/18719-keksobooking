@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Dias Valeev](https://up.htmlacademy.ru/javascript/16/user/18719).
-* Наставник: `Неизвестно`.
+* Наставник: [Альбина Токарчук](https://up.htmlacademy.ru/javascript/16/user/167491).
 
 ---
 
