@@ -123,3 +123,6 @@ var createCards = function () {
 
   return myCards;
 };
+
+var mapMode = document.querySelector('.map');
+mapMode.classList.remove('map--faded');
