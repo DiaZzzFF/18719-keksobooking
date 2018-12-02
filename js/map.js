@@ -53,6 +53,11 @@ var PHOTOS = [
 var mapWidth = document.querySelector('.map').clientWidth;
 var pinWidth = document.querySelector('.map__pin').clientWidth;
 
+var mapMode = document.querySelector('.map');
+mapMode.classList.remove('map--faded');
+
+var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
 // Функция генерации случайных данных.
 var getRandomData = function (arr) {
   var rand = Math.floor(Math.random() * arr.length);
@@ -97,11 +102,11 @@ var createCards = function () {
   for (var i = 0; i < 8; i++) {
     myCards[i] = {
       author: {
-        avarar: ''
+        avatar: getRandomData(AVATAR)
       },
 
       offer: {
-        title: '',
+        title: getRandomData(TITLE),
         address: location.x + ', ' + location.y,
         price: getRandomDataRange(1000, 1000000),
         type: getRandomData(TYPE),
@@ -124,5 +129,14 @@ var createCards = function () {
   return myCards;
 };
 
-var mapMode = document.querySelector('.map');
-mapMode.classList.remove('map--faded');
+var createPin = function (pin) {
+  var pinElement = pinTemplate.cloneNode(true);
+
+  pinElement.querySelector('.map__pin').style = 'left: ' + getRandomDataRange(pinWidth, mapWidth) + 'px; top: ' + getRandomDataRange(130, 630) + 'px;';
+  pinElement.querySelector('img').src = pin.author.avatar;
+  pinElement.querySelector('img').alt = pin.offer.title;
+
+  return pinElement;
+};
+
+
