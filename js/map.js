@@ -100,14 +100,17 @@ var createCards = function () {
   var myCards = [];
 
   for (var i = 0; i < 8; i++) {
+    var locationX = getRandomDataRange(0, mapWidth);
+    var locationY = getRandomDataRange(130, 630);
+
     myCards[i] = {
       author: {
-        avatar: getRandomData(AVATAR)
+        avatar: AVATAR[i]
       },
 
       offer: {
-        title: getRandomData(TITLE),
-        address: location.x + ', ' + location.y,
+        title: TITLE[i],
+        address: locationX + ', ' + locationY,
         price: getRandomDataRange(1000, 1000000),
         type: getRandomData(TYPE),
         rooms: getRandomDataRange(1, 5),
@@ -120,8 +123,8 @@ var createCards = function () {
       },
 
       location: {
-        x: getRandomDataRange(pinWidth, mapWidth),
-        y: getRandomDataRange(130, 630)
+        x: locationX,
+        y: locationY
       }
     };
   }
@@ -132,11 +135,24 @@ var createCards = function () {
 var createPin = function (pin) {
   var pinElement = pinTemplate.cloneNode(true);
 
-  pinElement.querySelector('.map__pin').style = 'left: ' + getRandomDataRange(pinWidth, mapWidth) + 'px; top: ' + getRandomDataRange(130, 630) + 'px;';
+  pinElement.style = 'left: ' + location.x + 'px; top: ' + location.y + 'px;';
   pinElement.querySelector('img').src = pin.author.avatar;
   pinElement.querySelector('img').alt = pin.offer.title;
 
   return pinElement;
 };
+
+var createPinFragment = function () {
+  var myArr = createCards();
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < myArr.length; i++) {
+    fragment.appendChild(createPin(myArr[i]));
+  }
+
+  return fragment;
+};
+
+document.querySelector('#pin').appendChild(createPinFragment());
 
 
