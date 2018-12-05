@@ -1,16 +1,5 @@
 'use strict';
 
-var AVATAR = [
-  'img/avatars/user08.png',
-  'img/avatars/user07.png',
-  'img/avatars/user06.png',
-  'img/avatars/user05.png',
-  'img/avatars/user04.png',
-  'img/avatars/user03.png',
-  'img/avatars/user02.png',
-  'img/avatars/user01.png'
-];
-
 var TITLE = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -21,13 +10,6 @@ var TITLE = [
   'Уютное бунгало далеко от моря',
   'Неуютное бунгало по колено в воде'
 ];
-
-var TYPE_OBJ = {
-  palace: 'Дворец',
-  flat: 'Квартира',
-  house: 'Дом',
-  bungalo: 'Бунгало'
-};
 
 var TYPE = [
   'palace',
@@ -51,22 +33,25 @@ var FEATURES = [
   'conditioner'
 ];
 
-var PHOTOS = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-];
-
-var mapWidth = document.querySelector('.map').clientWidth;
-var pinWidth = document.querySelector('.map__pin').clientWidth;
-
 var myMap = document.querySelector('.map');
-myMap.classList.remove('map--faded');
+var mapWidth = myMap.clientWidth;
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-var pinBox = document.querySelector('.map__pins');
+var myPin = document.querySelector('.map__pins');
+var pinWidth = myPin.querySelector('.map__pin').clientWidth;
 var filtersContainer = document.querySelector('.map__filters-container');
+
+// Функция создания массива (photos).
+var getPhotos = function () {
+  var myArr = [];
+
+  for (var i = 0; i < 3; i++) {
+    myArr[i] = 'http://o0.github.io/assets/images/tokyo/hotel' + (i + 1) + '.jpg';
+  }
+
+  return myArr;
+};
 
 // Функция генерации случайных данных.
 var getRandomData = function (arr) {
@@ -81,9 +66,6 @@ var getRandomDataRange = function (min, max) {
 
   return rand;
 };
-
-// Функция генерации случайных данных без повторений.
-// var getUniqueRandomData = function (arr)
 
 // Функция вызова массива из строк, расположенных в произвольном порядке. (Durstenfeld shuffle algorithm)
 var getRandomArray = function (arr) {
@@ -115,7 +97,7 @@ var createCards = function () {
 
     myCards[i] = {
       author: {
-        avatar: AVATAR[i]
+        avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
 
       offer: {
@@ -129,7 +111,7 @@ var createCards = function () {
         checkout: getRandomData(PERIOD),
         features: getRandomLength(FEATURES),
         description: '',
-        photos: getRandomArray(PHOTOS)
+        photos: getRandomArray(getPhotos())
       },
 
       location: {
@@ -165,6 +147,26 @@ var createPinFragment = function () {
   return fragment;
 };
 
+// Функция превращения текста (TYPE) англ >> рус
+var transformType = function (type) {
+  var myText = '';
+
+  if (type === 'palace') {
+    myText = 'Дворец';
+
+  } else if (type === 'flat') {
+    myText = 'Квартира';
+
+  } else if (type === 'bungalo') {
+    myText = 'Бунгало';
+
+  } else if (type === 'house') {
+    myText = 'Дом';
+  }
+
+  return myText;
+};
+
 // Функция вставки созданных DOM-элементов (features) в >>>> createCard()
 var createFeatureFragment = function (features) {
   var fragment = document.createDocumentFragment();
@@ -180,25 +182,6 @@ var createFeatureFragment = function (features) {
   return fragment;
 };
 
-// Функция вставки созданных DOM-элементов (photo) в >>>> createCard()
-var createPhotoFragment = function () {
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < PHOTOS.length; i++) {
-    var myImg = document.createElement('img');
-
-    myImg.src = PHOTOS[i];
-    myImg.classList.add('popup__photo');
-    myImg.width = 45;
-    myImg.height = 40;
-    myImg.alt = 'Фотография жилья';
-
-    fragment.appendChild(myImg);
-  }
-
-  return fragment;
-};
-
 // Функция создания DOM-элемента (объявления).
 var createCard = function (card) {
   var cardElement = cardTemplate.cloneNode(true);
@@ -206,13 +189,26 @@ var createCard = function (card) {
   cardElement.querySelector('.popup__title').textContent = card.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
   cardElement.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
-  cardElement.querySelector('.popup__type').textContent = TYPE_OBJ[card.offer.type];
+  cardElement.querySelector('.popup__type').textContent = transformType(card.offer.type);
   cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ' , выезд до ' + card.offer.checkout;
   cardElement.replaceChild(createFeatureFragment(card.offer.features), cardElement.querySelector('.popup__features'));
   cardElement.querySelector('.popup__description').textContent = card.offer.description;
-  cardElement.replaceChild(createPhotoFragment(card.offer.photos), cardElement.querySelector('.popup__photos'));
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
+  cardElement.querySelector('.popup__photos').innerHTML = '';
+
+  // Выводит все фотографии из списка (offer.photos) в (popup__photos)
+  for (var i = 0; i < card.offer.photos.length; i++) {
+    var myImg = document.createElement('img');
+
+    myImg.src = card.offer.photos[i];
+    myImg.classList.add('popup__photo');
+    myImg.width = 45;
+    myImg.height = 40;
+    myImg.alt = 'Фотография жилья';
+
+    cardElement.querySelector('.popup__photos').appendChild(myImg);
+  }
 
   return cardElement;
 };
@@ -229,5 +225,6 @@ var createCardFragment = function () {
   myMap.insertBefore(fragment, filtersContainer);
 };
 
-pinBox.appendChild(createPinFragment());
+myMap.classList.remove('map--faded');
+myPin.appendChild(createPinFragment());
 createCardFragment();
