@@ -35,12 +35,12 @@ var FEATURES = [
 
 var myMap = document.querySelector('.map');
 var mapWidth = myMap.clientWidth;
+var myPins = myMap.querySelector('.map__pins');
+var pinWidth = myPins.querySelector('.map__pin').clientWidth;
+var filtersContainer = myMap.querySelector('.map__filters-container');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-var myPin = document.querySelector('.map__pins');
-var pinWidth = myPin.querySelector('.map__pin').clientWidth;
-var filtersContainer = document.querySelector('.map__filters-container');
 
 // Функция создания массива (photos).
 var getPhotos = function () {
@@ -151,17 +151,25 @@ var createPinFragment = function () {
 var transformType = function (type) {
   var myText = '';
 
-  if (type === 'palace') {
-    myText = 'Дворец';
+  switch (type) {
+    case 'palace':
+      myText = 'Дворец';
+      break;
 
-  } else if (type === 'flat') {
-    myText = 'Квартира';
+    case 'flat':
+      myText = 'Квартира';
+      break;
 
-  } else if (type === 'bungalo') {
-    myText = 'Бунгало';
+    case 'bungalo':
+      myText = 'Бунгало';
+      break;
 
-  } else if (type === 'house') {
-    myText = 'Дом';
+    case 'house':
+      myText = 'Дом';
+      break;
+
+    default:
+      break;
   }
 
   return myText;
@@ -172,11 +180,30 @@ var createFeatureFragment = function (features) {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < features.length; i++) {
-    var myLi = document.createElement('li');
+    var myFeatures = document.createElement('li');
 
-    myLi.className = 'popup__feature popup__feature--' + features[i];
+    myFeatures.className = 'popup__feature popup__feature--' + features[i];
 
-    fragment.appendChild(myLi);
+    fragment.appendChild(myFeatures);
+  }
+
+  return fragment;
+};
+
+// Функция вставки созданных DOM-элементов (photos) в >>>> createCard()
+var createPhotoFragment = function (photos) {
+  var fragment = document.createDocumentFragment();
+
+  for (var i = 0; i < photos.length; i++) {
+    var myPhotos = document.createElement('img');
+
+    myPhotos.src = photos[i];
+    myPhotos.classList.add('popup__photo');
+    myPhotos.width = 45;
+    myPhotos.height = 40;
+    myPhotos.alt = 'Фотография жилья';
+
+    fragment.appendChild(myPhotos);
   }
 
   return fragment;
@@ -194,21 +221,8 @@ var createCard = function (card) {
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ' , выезд до ' + card.offer.checkout;
   cardElement.replaceChild(createFeatureFragment(card.offer.features), cardElement.querySelector('.popup__features'));
   cardElement.querySelector('.popup__description').textContent = card.offer.description;
+  cardElement.replaceChild(createPhotoFragment(card.offer.photos), cardElement.querySelector('.popup__photos'));
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
-  cardElement.querySelector('.popup__photos').innerHTML = '';
-
-  // Выводит все фотографии из списка (offer.photos) в (popup__photos)
-  for (var i = 0; i < card.offer.photos.length; i++) {
-    var myImg = document.createElement('img');
-
-    myImg.src = card.offer.photos[i];
-    myImg.classList.add('popup__photo');
-    myImg.width = 45;
-    myImg.height = 40;
-    myImg.alt = 'Фотография жилья';
-
-    cardElement.querySelector('.popup__photos').appendChild(myImg);
-  }
 
   return cardElement;
 };
@@ -226,5 +240,5 @@ var createCardFragment = function () {
 };
 
 myMap.classList.remove('map--faded');
-myPin.appendChild(createPinFragment());
+myPins.appendChild(createPinFragment());
 createCardFragment();
