@@ -37,10 +37,16 @@ var myMap = document.querySelector('.map');
 var mapWidth = myMap.clientWidth;
 var myPins = myMap.querySelector('.map__pins');
 var pinWidth = myPins.querySelector('.map__pin').clientWidth;
-var filtersContainer = myMap.querySelector('.map__filters-container');
+var mapFiltersContainer = myMap.querySelector('.map__filters-container');
+var mapFilter = mapFiltersContainer.querySelectorAll('.map__filter');
+var mapFeatures = mapFiltersContainer.querySelector('.map__features');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+
+var adForm = document.querySelector('.ad-form');
+var adFormFieldsets = adForm.querySelectorAll('fieldset');
+
 
 // Функция создания массива (photos).
 var getPhotos = function () {
@@ -236,9 +242,25 @@ var createCardFragment = function () {
     fragment.appendChild(createCard(myArr[i]));
   }
 
-  myMap.insertBefore(fragment, filtersContainer);
+  myMap.insertBefore(fragment, mapFiltersContainer);
 };
 
-myMap.classList.remove('map--faded');
-myPins.appendChild(createPinFragment());
-createCardFragment();
+// ---------------------------------------------------------
+
+var disableElements = function (element) {
+  for (var i = 0; i < element.length; i++) {
+    element[i].setAttribute('disabled', '');
+  }
+};
+
+disableElements(mapFeatures);
+disableElements(mapFilter);
+disableElements(adFormFieldsets);
+
+// ---------------------------------------------------------
+
+// myMap.classList.remove('map--faded');
+// myPins.appendChild(createPinFragment());
+// createCardFragment();
+
+
