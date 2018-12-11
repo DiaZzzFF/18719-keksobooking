@@ -34,18 +34,21 @@ var FEATURES = [
 ];
 
 var myMap = document.querySelector('.map');
-var mapWidth = myMap.clientWidth;
+var myMapWidth = myMap.clientWidth;
+
 var myPins = myMap.querySelector('.map__pins');
-var pinWidth = myPins.querySelector('.map__pin').clientWidth;
-var mapFiltersContainer = myMap.querySelector('.map__filters-container');
-var mapFilter = mapFiltersContainer.querySelectorAll('.map__filter');
-var mapFeatures = mapFiltersContainer.querySelector('.map__features');
+var myPin = myPins.querySelector('.map__pin');
+var myPinWidth = myPin.clientWidth;
+
+var myFormFiltersContainer = myMap.querySelector('.map__filters-container');
+var myFormFilter = myFormFiltersContainer.querySelectorAll('.map__filter');
+var myFormFeatures = myFormFiltersContainer.querySelector('.map__features');
 
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
-var adForm = document.querySelector('.ad-form');
-var adFormFieldsets = adForm.querySelectorAll('fieldset');
+var myAdForm = document.querySelector('.ad-form');
+var myAdFormFieldsets = myAdForm.querySelectorAll('fieldset');
 
 
 // Функция создания массива (photos).
@@ -98,7 +101,7 @@ var createCards = function () {
   var myCards = [];
 
   for (var i = 0; i < 8; i++) {
-    var locationX = getRandomDataRange(0, mapWidth - pinWidth);
+    var locationX = getRandomDataRange(0, myMapWidth - myPinWidth);
     var locationY = getRandomDataRange(130, 630);
 
     myCards[i] = {
@@ -242,10 +245,10 @@ var createCardFragment = function () {
     fragment.appendChild(createCard(myArr[i]));
   }
 
-  myMap.insertBefore(fragment, mapFiltersContainer);
+  myMap.insertBefore(fragment, myFormFiltersContainer);
 };
 
-// ---------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------
 
 var disableElements = function (element) {
   for (var i = 0; i < element.length; i++) {
@@ -253,14 +256,30 @@ var disableElements = function (element) {
   }
 };
 
-disableElements(mapFeatures);
-disableElements(mapFilter);
-disableElements(adFormFieldsets);
+var enableElements = function (element) {
+  for (var i = 0; i < element.length; i++) {
+    element[i].removeAttribute('disabled');
+  }
+};
 
-// ---------------------------------------------------------
+var onPinMainClick = function () {
+  myMap.classList.remove('map--faded');
+  myAdForm.classList.remove('ad-form--disabled');
 
-// myMap.classList.remove('map--faded');
-// myPins.appendChild(createPinFragment());
-// createCardFragment();
+  myPins.appendChild(createPinFragment());
+  createCardFragment();
 
+  enableElements(myAdFormFieldsets);
+  enableElements(myFormFilter);
+  enableElements(myFormFeatures);
+};
 
+myPin.addEventListener('mouseup', function (evt) {
+  evt.preventDefault();
+
+  onPinMainClick();
+});
+
+disableElements(myAdFormFieldsets);
+disableElements(myFormFilter);
+disableElements(myFormFeatures);
