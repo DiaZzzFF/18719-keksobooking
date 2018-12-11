@@ -35,10 +35,12 @@ var FEATURES = [
 
 var myMap = document.querySelector('.map');
 var myMapWidth = myMap.clientWidth;
+var myMapHeight = myMap.clientHeight;
 
 var myPins = myMap.querySelector('.map__pins');
 var myPin = myPins.querySelector('.map__pin');
 var myPinWidth = myPin.clientWidth;
+var myPinHeight = myPin.clientHeight;
 
 var myFormFiltersContainer = myMap.querySelector('.map__filters-container');
 var myFormFilter = myFormFiltersContainer.querySelectorAll('.map__filter');
@@ -49,6 +51,7 @@ var cardTemplate = document.querySelector('#card').content.querySelector('.map__
 
 var myAdForm = document.querySelector('.ad-form');
 var myAdFormFieldsets = myAdForm.querySelectorAll('fieldset');
+var myAddress = myAdForm.querySelector('input[name="address"]');
 
 
 // Функция создания массива (photos).
@@ -250,6 +253,13 @@ var createCardFragment = function () {
 
 // ----------------------------------------------------------------------------------------------------------
 
+var calcAddress = function () {
+  var coordinateX = Math.round(myMapWidth / 2);
+  var coordinateY = Math.round((myMapHeight / 2) + (myPinHeight / 2));
+
+  myAddress.value = coordinateX + ', ' + coordinateY;
+};
+
 var disableElements = function (element) {
   for (var i = 0; i < element.length; i++) {
     element[i].setAttribute('disabled', '');
@@ -269,16 +279,14 @@ var onPinMainClick = function () {
   myPins.appendChild(createPinFragment());
   createCardFragment();
 
+  calcAddress();
+
   enableElements(myAdFormFieldsets);
   enableElements(myFormFilter);
   enableElements(myFormFeatures);
 };
 
-myPin.addEventListener('mouseup', function (evt) {
-  evt.preventDefault();
-
-  onPinMainClick();
-});
+myPin.addEventListener('mouseup', onPinMainClick);
 
 disableElements(myAdFormFieldsets);
 disableElements(myFormFilter);
