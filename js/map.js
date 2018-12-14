@@ -1,5 +1,8 @@
 'use strict';
 
+// Количество сгенерированных JS объектов.
+var NUMBER_OF_CARDS = 8;
+
 var TITLE = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -33,26 +36,22 @@ var FEATURES = [
   'conditioner'
 ];
 
+var ESC_KEYCODE = 27;
+
 var myMap = document.querySelector('.map');
 var myMapWidth = myMap.clientWidth;
 var myMapHeight = myMap.clientHeight;
 
 var myPins = myMap.querySelector('.map__pins');
-var myPin = myPins.querySelector('.map__pin');
-var myPinWidth = myPin.clientWidth;
-var myPinHeight = myPin.clientHeight;
+var myPinMain = myPins.querySelector('.map__pin--main');
+var myPinWidth = myPinMain.clientWidth;
+var myPinHeight = myPinMain.clientHeight;
 
-var myFormFiltersContainer = myMap.querySelector('.map__filters-container');
-var myFormFilter = myFormFiltersContainer.querySelectorAll('.map__filter');
-var myFormFeatures = myFormFiltersContainer.querySelector('.map__features');
-
-var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var myFormFilter = myMap.querySelectorAll('.map__filter');
+var myFormFeatures = myMap.querySelector('.map__features');
 
 var myAdForm = document.querySelector('.ad-form');
 var myAdFormFieldsets = myAdForm.querySelectorAll('fieldset');
-var myAddress = myAdForm.querySelector('input[name="address"]');
-
 
 // Функция создания массива (photos).
 var getPhotos = function () {
@@ -99,11 +98,11 @@ var getRandomLength = function (arr) {
   return myArr;
 };
 
-// Функция создания массива, состоящая из 8 сгенерированных JS объектов.
+// Функция создания массива, состоящая из сгенерированных JS объектов.
 var createCards = function () {
   var myCards = [];
 
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < NUMBER_OF_CARDS; i++) {
     var locationX = getRandomDataRange(0, myMapWidth - myPinWidth);
     var locationY = getRandomDataRange(130, 630);
 
@@ -138,11 +137,17 @@ var createCards = function () {
 
 // Функция создания DOM-элемента (метки на карте).
 var createPin = function (pin) {
+  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
   var pinElement = pinTemplate.cloneNode(true);
 
   pinElement.style = 'left: ' + pin.location.x + 'px; top: ' + pin.location.y + 'px;';
   pinElement.querySelector('img').src = pin.author.avatar;
   pinElement.querySelector('img').alt = pin.offer.title;
+
+  // Обработчик для открытия (объявления)
+  pinElement.addEventListener('click', function () {
+    openPopup(pin);
+  });
 
   return pinElement;
 };
@@ -223,6 +228,7 @@ var createPhotoFragment = function (photos) {
 
 // Функция создания DOM-элемента (объявления).
 var createCard = function (card) {
+  var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var cardElement = cardTemplate.cloneNode(true);
 
   cardElement.querySelector('.popup__title').textContent = card.offer.title;
@@ -236,57 +242,69 @@ var createCard = function (card) {
   cardElement.replaceChild(createPhotoFragment(card.offer.photos), cardElement.querySelector('.popup__photos'));
   cardElement.querySelector('.popup__avatar').src = card.author.avatar;
 
+  // Обработчик для закрытия (объявления)
+  cardElement.querySelector('.popup__close').addEventListener('click', closePopup);
+
   return cardElement;
 };
 
-// Функция вставки созданных DOM-элементов (объявления) в блок.
-var createCardFragment = function () {
-  var myArr = createCards();
-  var fragment = document.createDocumentFragment();
-
-  for (var i = 0; i < myArr.length; i++) {
-    fragment.appendChild(createCard(myArr[i]));
-  }
-
-  myMap.insertBefore(fragment, myFormFiltersContainer);
-};
-
-// ----------------------------------------------------------------------------------------------------------
-
+// Функция заполнения поля адреса
 var calcAddress = function () {
   var coordinateX = Math.round(myMapWidth / 2);
   var coordinateY = Math.round((myMapHeight / 2) + (myPinHeight / 2));
 
+  var myAddress = myAdForm.querySelector('input[name="address"]');
+
   myAddress.value = coordinateX + ', ' + coordinateY;
+
+  return myAddress;
 };
 
+// Функция для неактивного состояния страницы
 var disableElements = function (element) {
   for (var i = 0; i < element.length; i++) {
     element[i].setAttribute('disabled', '');
   }
 };
 
-var enableElements = function (element) {
-  for (var i = 0; i < element.length; i++) {
-    element[i].removeAttribute('disabled');
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
   }
 };
 
-var onPinMainClick = function () {
+var closePopup = function () {
+  var myPopup = myMap.querySelector('.popup');
+
+  if (myPopup) {
+    myPopup.remove();
+  }
+
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+var openPopup = function (forPin) {
+  closePopup();
+
+  var myFormFiltersContainer = myMap.querySelector('.map__filters-container');
+
+  myMap.insertBefore(createCard(forPin), myFormFiltersContainer);
+
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var onMyPinMainMouseup = function () {
   myMap.classList.remove('map--faded');
   myAdForm.classList.remove('ad-form--disabled');
 
   myPins.appendChild(createPinFragment());
-  createCardFragment();
 
   calcAddress();
 
-  enableElements(myAdFormFieldsets);
-  enableElements(myFormFilter);
-  enableElements(myFormFeatures);
+  myPinMain.removeEventListener('mouseup', onMyPinMainMouseup);
 };
 
-myPin.addEventListener('mouseup', onPinMainClick);
+myPinMain.addEventListener('mouseup', onMyPinMainMouseup);
 
 disableElements(myAdFormFieldsets);
 disableElements(myFormFilter);
