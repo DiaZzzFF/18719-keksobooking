@@ -233,7 +233,7 @@ var createCard = function (card) {
 
   cardElement.querySelector('.popup__title').textContent = card.offer.title;
   cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
-  cardElement.querySelector('.popup__text--price').textContent = card.offer.price + '₽/ночь';
+  cardElement.querySelector('.popup__text--price').textContent = card.offer.price + ' ₽/ночь';
   cardElement.querySelector('.popup__type').textContent = transformType(card.offer.type);
   cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
   cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ' , выезд до ' + card.offer.checkout;
@@ -317,20 +317,44 @@ myPinMain.addEventListener('mouseup', onMyPinMainMouseup);
 
 // ----------------------------------------------------------------------------------------------------
 
-var myAdFormElementTitle = myAdForm.querySelector('#title');
+var myHeadline = myAdForm.querySelector('#title');
 
-myAdFormElementTitle.addEventListener('invalid', function () {
-  if (myAdFormElementTitle.validity.tooShort) {
-    myAdFormElementTitle.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
+myHeadline.addEventListener('invalid', function () {
+  if (myHeadline.validity.tooShort) {
+    myHeadline.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
 
-  } else if (myAdFormElementTitle.validity.tooLong) {
-    myAdFormElementTitle.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
+  } else if (myHeadline.validity.tooLong) {
+    myHeadline.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
 
-  } else if (myAdFormElementTitle.validity.valueMissing) {
-    myAdFormElementTitle.setCustomValidity('Обязательное поле');
+  } else if (myHeadline.validity.valueMissing) {
+    myHeadline.setCustomValidity('Обязательное поле');
 
   } else {
-    myAdFormElementTitle.setCustomValidity('');
+    myHeadline.setCustomValidity('');
+  }
+});
+
+// ---------------------------------------------------
+
+var myTypeOfHousing = myAdForm.querySelector('#type');
+var myPricePerNight = myAdForm.querySelector('#price');
+
+myTypeOfHousing.addEventListener('change', function () {
+  if (myTypeOfHousing.value === 'bungalo') {
+    myPricePerNight.setAttribute('min', '0');
+    myPricePerNight.placeholder = '0';
+
+  } else if (myTypeOfHousing.value === 'flat') {
+    myPricePerNight.setAttribute('min', '1000');
+    myPricePerNight.placeholder = '1 000';
+
+  } else if (myTypeOfHousing.value === 'house') {
+    myPricePerNight.setAttribute('min', '5000');
+    myPricePerNight.placeholder = '5 000';
+
+  } else if (myTypeOfHousing.value === 'palace') {
+    myPricePerNight.setAttribute('min', '10000');
+    myPricePerNight.placeholder = '10 000';
   }
 });
 
