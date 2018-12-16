@@ -267,6 +267,13 @@ var disableElements = function (element) {
   }
 };
 
+// Функция для активного состояния страницы
+var enableElements = function (element) {
+  for (var i = 0; i < element.length; i++) {
+    element[i].removeAttribute('disabled');
+  }
+};
+
 var onPopupEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     closePopup();
@@ -297,6 +304,8 @@ var onMyPinMainMouseup = function () {
   myMap.classList.remove('map--faded');
   myAdForm.classList.remove('ad-form--disabled');
 
+  enableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
+
   createPinFragment();
 
   calcAddress();
@@ -305,5 +314,26 @@ var onMyPinMainMouseup = function () {
 };
 
 myPinMain.addEventListener('mouseup', onMyPinMainMouseup);
+
+// ----------------------------------------------------------------------------------------------------
+
+var myAdFormElementTitle = myAdForm.querySelector('#title');
+
+myAdFormElementTitle.addEventListener('invalid', function () {
+  if (myAdFormElementTitle.validity.tooShort) {
+    myAdFormElementTitle.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
+
+  } else if (myAdFormElementTitle.validity.tooLong) {
+    myAdFormElementTitle.setCustomValidity('Заголовок объявления не должен превышать 100 символов');
+
+  } else if (myAdFormElementTitle.validity.valueMissing) {
+    myAdFormElementTitle.setCustomValidity('Обязательное поле');
+
+  } else {
+    myAdFormElementTitle.setCustomValidity('');
+  }
+});
+
+// ----------------------------------------------------------------------------------------------------
 
 disableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
