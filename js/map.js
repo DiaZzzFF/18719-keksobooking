@@ -161,7 +161,7 @@ var createPinFragment = function () {
     fragment.appendChild(createPin(myArr[i]));
   }
 
-  return fragment;
+  myPins.appendChild(fragment);
 };
 
 // Функция превращения текста (TYPE) англ >> рус
@@ -297,7 +297,7 @@ var onMyPinMainMouseup = function () {
   myMap.classList.remove('map--faded');
   myAdForm.classList.remove('ad-form--disabled');
 
-  myPins.appendChild(createPinFragment());
+  createPinFragment();
 
   calcAddress();
 
@@ -306,6 +306,4 @@ var onMyPinMainMouseup = function () {
 
 myPinMain.addEventListener('mouseup', onMyPinMainMouseup);
 
-disableElements(myAdFormFieldsets);
-disableElements(myFormFilter);
-disableElements(myFormFeatures);
+disableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
