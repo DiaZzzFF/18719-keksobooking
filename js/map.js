@@ -358,6 +358,23 @@ myTypeOfHousing.addEventListener('change', function () {
   }
 });
 
+// ---------------------------------------------------
+
+var myTimeIn = myAdForm.querySelector('#timein');
+var myTimeOut = myAdForm.querySelector('#timeout');
+
+myTimeIn.addEventListener('change', function () {
+  if (myTimeIn.value !== myTimeOut.value) {
+    myTimeOut.value = myTimeIn.value;
+  }
+});
+
+myTimeOut.addEventListener('change', function () {
+  if (myTimeOut.value !== myTimeIn.value) {
+    myTimeIn.value = myTimeOut.value;
+  }
+});
+
 // ----------------------------------------------------------------------------------------------------
 
 disableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
