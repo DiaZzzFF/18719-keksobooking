@@ -323,8 +323,8 @@ var onMyPinMainMouseup = function () {
 
 myPinMain.addEventListener('mouseup', onMyPinMainMouseup);
 
-// Валидация 'Заголовок объявления'
-myHeadline.addEventListener('invalid', function () {
+// Функция валидации 'Заголовок объявления'
+var onMyHeadlineInvalid = function () {
   if (myHeadline.validity.tooShort) {
     myHeadline.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
 
@@ -337,10 +337,12 @@ myHeadline.addEventListener('invalid', function () {
   } else {
     myHeadline.setCustomValidity('');
   }
-});
+};
 
-// Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
-myTypeOfHousing.addEventListener('change', function () {
+myHeadline.addEventListener('invalid', onMyHeadlineInvalid);
+
+// Функция, где поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
+var onMyTypeOfHousingChange = function () {
   if (myTypeOfHousing.value === 'bungalo') {
     myPricePerNight.setAttribute('min', '0');
     myPricePerNight.placeholder = '0';
@@ -357,7 +359,9 @@ myTypeOfHousing.addEventListener('change', function () {
     myPricePerNight.setAttribute('min', '10000');
     myPricePerNight.placeholder = '10 000';
   }
-});
+};
+
+myTypeOfHousing.addEventListener('change', onMyTypeOfHousingChange);
 
 // Поля «Время заезда» и «Время выезда» синхронизированы
 myTimeIn.addEventListener('change', function () {
