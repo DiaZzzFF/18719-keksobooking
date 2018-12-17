@@ -53,6 +53,14 @@ var myFormFeatures = myMap.querySelector('.map__features');
 var myAdForm = document.querySelector('.ad-form');
 var myAdFormFieldsets = myAdForm.querySelectorAll('fieldset');
 
+var myHeadline = myAdForm.querySelector('#title');
+var myTypeOfHousing = myAdForm.querySelector('#type');
+var myPricePerNight = myAdForm.querySelector('#price');
+var myTimeIn = myAdForm.querySelector('#timein');
+var myTimeOut = myAdForm.querySelector('#timeout');
+var myNumbersOfRooms = myAdForm.querySelector('#room_number');
+var myNumberOfSeats = myAdForm.querySelector('#capacity');
+
 // Функция создания массива (photos).
 var getPhotos = function () {
   var myArr = [];
@@ -315,10 +323,7 @@ var onMyPinMainMouseup = function () {
 
 myPinMain.addEventListener('mouseup', onMyPinMainMouseup);
 
-// ----------------------------------------------------------------------------------------------------
-
-var myHeadline = myAdForm.querySelector('#title');
-
+// Валидация 'Заголовок объявления'
 myHeadline.addEventListener('invalid', function () {
   if (myHeadline.validity.tooShort) {
     myHeadline.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
@@ -334,11 +339,7 @@ myHeadline.addEventListener('invalid', function () {
   }
 });
 
-// ---------------------------------------------------
-
-var myTypeOfHousing = myAdForm.querySelector('#type');
-var myPricePerNight = myAdForm.querySelector('#price');
-
+// Поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
 myTypeOfHousing.addEventListener('change', function () {
   if (myTypeOfHousing.value === 'bungalo') {
     myPricePerNight.setAttribute('min', '0');
@@ -358,28 +359,19 @@ myTypeOfHousing.addEventListener('change', function () {
   }
 });
 
-// ---------------------------------------------------
-
-var myTimeIn = myAdForm.querySelector('#timein');
-var myTimeOut = myAdForm.querySelector('#timeout');
-
+// Поля «Время заезда» и «Время выезда» синхронизированы
 myTimeIn.addEventListener('change', function () {
   if (myTimeIn.value !== myTimeOut.value) {
     myTimeOut.value = myTimeIn.value;
   }
 });
-
 myTimeOut.addEventListener('change', function () {
   if (myTimeOut.value !== myTimeIn.value) {
     myTimeIn.value = myTimeOut.value;
   }
 });
 
-// ---------------------------------------------------
-
-var myNumbersOfRooms = myAdForm.querySelector('#room_number');
-var myNumberOfSeats = myAdForm.querySelector('#capacity');
-
+// Поле «Количество комнат» синхронизировано с полем «Количество мест»
 var connectsRoomsAndSeats = function () {
   if (myNumbersOfRooms.value === '1' && myNumberOfSeats.value !== '1') {
     myNumberOfSeats.setCustomValidity('Возможные варианты: «для 1 гостя»');
@@ -400,7 +392,5 @@ var connectsRoomsAndSeats = function () {
 
 myNumbersOfRooms.addEventListener('change', connectsRoomsAndSeats);
 myNumberOfSeats.addEventListener('change', connectsRoomsAndSeats);
-
-// ----------------------------------------------------------------------------------------------------
 
 disableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
