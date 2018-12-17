@@ -375,6 +375,32 @@ myTimeOut.addEventListener('change', function () {
   }
 });
 
+// ---------------------------------------------------
+
+var myNumbersOfRooms = myAdForm.querySelector('#room_number');
+var myNumberOfSeats = myAdForm.querySelector('#capacity');
+
+var connectsRoomsAndSeats = function () {
+  if (myNumbersOfRooms.value === '1' && myNumberOfSeats.value !== '1') {
+    myNumberOfSeats.setCustomValidity('Возможные варианты: «для 1 гостя»');
+
+  } else if (myNumbersOfRooms.value === '2' && (myNumberOfSeats.value === '3' || myNumberOfSeats.value === '0')) {
+    myNumberOfSeats.setCustomValidity('Возможные варианты: «для 2 гостей» или «для 1 гостя»');
+
+  } else if (myNumbersOfRooms.value === '3' && myNumberOfSeats.value === '0') {
+    myNumberOfSeats.setCustomValidity('Возможные варианты: «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
+
+  } else if (myNumbersOfRooms.value === '100' && myNumberOfSeats.value !== '0') {
+    myNumberOfSeats.setCustomValidity('Возможные варианты: «не для гостей»');
+
+  } else {
+    myNumberOfSeats.setCustomValidity('');
+  }
+};
+
+myNumbersOfRooms.addEventListener('change', connectsRoomsAndSeats);
+myNumberOfSeats.addEventListener('change', connectsRoomsAndSeats);
+
 // ----------------------------------------------------------------------------------------------------
 
 disableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
