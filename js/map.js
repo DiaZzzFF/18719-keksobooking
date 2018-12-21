@@ -61,6 +61,13 @@ var myTimeOut = myAdForm.querySelector('#timeout');
 var myNumbersOfRooms = myAdForm.querySelector('#room_number');
 var myNumberOfSeats = myAdForm.querySelector('#capacity');
 
+var myAddress = myAdForm.querySelector('input[name="address"]');
+
+var myCoordinate = {
+  X: Math.round(myMapWidth / 2),
+  Y: Math.round((myMapHeight / 2) + (myPinHeight / 2))
+};
+
 // Функция создания массива (photos).
 var getPhotos = function () {
   var myArr = [];
@@ -296,15 +303,6 @@ var openPopup = function (forPin) {
   document.addEventListener('keydown', onPopupEscPress);
 };
 
-// ---------------------------------------------------------------------------------------------------------------
-
-var myAddress = myAdForm.querySelector('input[name="address"]');
-
-var myCoordinate = {
-  X: Math.round(myMapWidth / 2),
-  Y: Math.round((myMapHeight / 2) + (myPinHeight / 2))
-};
-
 // Функция заполнения поля адреса
 var calcAddress = function (coordX, coordY) {
   myAddress.value = coordX + ', ' + coordY;
@@ -312,6 +310,7 @@ var calcAddress = function (coordX, coordY) {
   return myAddress;
 };
 
+// Функция активации элементов
 var activateMyMap = function () {
   myMap.classList.remove('map--faded');
   myAdForm.classList.remove('ad-form--disabled');
@@ -321,19 +320,15 @@ var activateMyMap = function () {
   createPinFragment();
 
   calcAddress(myCoordinate.X, myCoordinate.Y);
-
-  myPinMain.removeEventListener('mousedown', onMyPinMainMousedown);
 };
-
-// ---------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------------
 
 // Функция 'Drag-and-Drop' для главного маркера
 var onMyPinMainMousedown = function (evt) {
   evt.preventDefault();
 
-  activateMyMap();
+  if (myMap.classList.contains('map--faded')) {
+    activateMyMap();
+  }
 
   var startCoords = {
     x: evt.clientX,
@@ -363,21 +358,21 @@ var onMyPinMainMousedown = function (evt) {
     var myMinY = 130;
     var myMaxY = 630;
 
-    var myCurrentAddress = {
+    var myNewAddress = {
       x: myPinMain.offsetLeft - shift.x,
       y: myPinMain.offsetTop - shift.y
     };
 
-    if ((myCurrentAddress.x >= myMinX) && (myCurrentAddress.x <= myMaxX)) {
-      myPinMain.style.left = myCurrentAddress.x + 'px';
+    if ((myNewAddress.x >= myMinX) && (myNewAddress.x <= myMaxX)) {
+      myPinMain.style.left = myNewAddress.x + 'px';
 
-      myCoordinate.X = myCurrentAddress.x;
+      myCoordinate.X = myNewAddress.x;
     }
 
-    if ((myCurrentAddress.y >= myMinY) && (myCurrentAddress.y <= myMaxY)) {
-      myPinMain.style.top = myCurrentAddress.y + 'px';
+    if ((myNewAddress.y >= myMinY) && (myNewAddress.y <= myMaxY)) {
+      myPinMain.style.top = myNewAddress.y + 'px';
 
-      myCoordinate.Y = myCurrentAddress.y;
+      myCoordinate.Y = myNewAddress.y;
     }
 
     calcAddress(myCoordinate.X, myCoordinate.Y);
@@ -405,12 +400,6 @@ var onMyPinMainMousedown = function (evt) {
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
 };
-
-myPinMain.addEventListener('mousedown', onMyPinMainMousedown);
-
-// ---------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------------------------
 
 // Функция валидации 'Заголовок объявления'
 var onMyHeadlineInvalid = function () {
@@ -482,6 +471,8 @@ var connectsRoomsAndSeats = function () {
     myNumberOfSeats.setCustomValidity('');
   }
 };
+
+myPinMain.addEventListener('mousedown', onMyPinMainMousedown);
 
 myNumbersOfRooms.addEventListener('change', connectsRoomsAndSeats);
 myNumberOfSeats.addEventListener('change', connectsRoomsAndSeats);
