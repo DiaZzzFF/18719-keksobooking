@@ -61,6 +61,13 @@ var myTimeOut = myAdForm.querySelector('#timeout');
 var myNumbersOfRooms = myAdForm.querySelector('#room_number');
 var myNumberOfSeats = myAdForm.querySelector('#capacity');
 
+var myAddress = myAdForm.querySelector('input[name="address"]');
+
+var myCoordinate = {
+  X: Math.round(myMapWidth / 2),
+  Y: Math.round((myMapHeight / 2) + (myPinHeight / 2))
+};
+
 // Функция создания массива (photos).
 var getPhotos = function () {
   var myArr = [];
@@ -256,18 +263,6 @@ var createCard = function (card) {
   return cardElement;
 };
 
-// Функция заполнения поля адреса
-var calcAddress = function () {
-  var coordinateX = Math.round(myMapWidth / 2);
-  var coordinateY = Math.round((myMapHeight / 2) + (myPinHeight / 2));
-
-  var myAddress = myAdForm.querySelector('input[name="address"]');
-
-  myAddress.value = coordinateX + ', ' + coordinateY;
-
-  return myAddress;
-};
-
 // Функция для неактивного состояния страницы
 var disableElements = function (element) {
   for (var i = 0; i < element.length; i++) {
@@ -308,7 +303,15 @@ var openPopup = function (forPin) {
   document.addEventListener('keydown', onPopupEscPress);
 };
 
-var onMyPinMainMouseup = function () {
+// Функция заполнения поля адреса
+var calcAddress = function (coordX, coordY) {
+  myAddress.value = coordX + ', ' + coordY;
+
+  return myAddress;
+};
+
+// Функция активации элементов
+var activateMyMap = function () {
   myMap.classList.remove('map--faded');
   myAdForm.classList.remove('ad-form--disabled');
 
@@ -316,12 +319,87 @@ var onMyPinMainMouseup = function () {
 
   createPinFragment();
 
-  calcAddress();
-
-  myPinMain.removeEventListener('mouseup', onMyPinMainMouseup);
+  calcAddress(myCoordinate.X, myCoordinate.Y);
 };
 
-myPinMain.addEventListener('mouseup', onMyPinMainMouseup);
+// Функция 'Drag-and-Drop' для главного маркера
+var onMyPinMainMousedown = function (evt) {
+  evt.preventDefault();
+
+  if (myMap.classList.contains('map--faded')) {
+    activateMyMap();
+  }
+
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  var dragged = false;
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    dragged = true;
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY
+    };
+
+    startCoords = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
+
+    var myMinX = 0;
+    var myMaxX = myMapWidth - myPinWidth;
+
+    var myMinY = 130;
+    var myMaxY = 630;
+
+    var myNewAddress = {
+      x: myPinMain.offsetLeft - shift.x,
+      y: myPinMain.offsetTop - shift.y
+    };
+
+    if ((myNewAddress.x >= myMinX) && (myNewAddress.x <= myMaxX)) {
+      myPinMain.style.left = myNewAddress.x + 'px';
+
+      myCoordinate.X = myNewAddress.x;
+    }
+
+    if ((myNewAddress.y >= myMinY) && (myNewAddress.y <= myMaxY)) {
+      myPinMain.style.top = myNewAddress.y + 'px';
+
+      myCoordinate.Y = myNewAddress.y;
+    }
+
+    calcAddress(myCoordinate.X, myCoordinate.Y);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    calcAddress(myCoordinate.X, myCoordinate.Y);
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+
+    if (dragged) {
+      var onClickPreventDefault = function (evtD) {
+        evtD.preventDefault();
+
+        myPinMain.removeEventListener('click', onClickPreventDefault);
+      };
+
+      myPinMain.addEventListener('click', onClickPreventDefault);
+    }
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
 
 // Функция валидации 'Заголовок объявления'
 var onMyHeadlineInvalid = function () {
@@ -393,6 +471,8 @@ var connectsRoomsAndSeats = function () {
     myNumberOfSeats.setCustomValidity('');
   }
 };
+
+myPinMain.addEventListener('mousedown', onMyPinMainMousedown);
 
 myNumbersOfRooms.addEventListener('change', connectsRoomsAndSeats);
 myNumberOfSeats.addEventListener('change', connectsRoomsAndSeats);
