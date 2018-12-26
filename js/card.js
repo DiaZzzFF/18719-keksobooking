@@ -80,7 +80,7 @@
     cardElement.querySelector('.popup__avatar').src = card.author.avatar;
 
     // Обработчик для закрытия (объявления)
-    cardElement.querySelector('.popup__close').addEventListener('click', window.popup.closePopup);
+    cardElement.querySelector('.popup__close').addEventListener('click', window.utils.closePopup);
 
     return cardElement;
   };

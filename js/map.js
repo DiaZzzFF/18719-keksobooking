@@ -1,15 +1,14 @@
 'use strict';
 
 (function () {
-  var myMap = document.querySelector('.map');
-  var myMapWidth = myMap.clientWidth;
-  var myMapHeight = myMap.clientHeight;
+  var myMapWidth = window.utils.myMap.clientWidth;
+  var myMapHeight = window.utils.myMap.clientHeight;
 
-  var myPinMain = myMap.querySelector('.map__pin--main');
+  var myPinMain = window.utils.myMap.querySelector('.map__pin--main');
   var myPinHeight = myPinMain.clientHeight;
 
-  var myFormFilter = myMap.querySelectorAll('.map__filter');
-  var myFormFeatures = myMap.querySelector('.map__features');
+  var myFormFilter = window.utils.myMap.querySelectorAll('.map__filter');
+  var myFormFeatures = window.utils.myMap.querySelector('.map__features');
 
   var myAdForm = document.querySelector('.ad-form');
   var myAdFormFieldsets = myAdForm.querySelectorAll('fieldset');
@@ -44,7 +43,7 @@
 
   // Функция активации элементов
   var activateMyMap = function () {
-    myMap.classList.remove('map--faded');
+    window.utils.myMap.classList.remove('map--faded');
     myAdForm.classList.remove('ad-form--disabled');
 
     enableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
@@ -62,4 +61,3 @@
     MyCoordinates: MyCoordinates
   };
 })();
-

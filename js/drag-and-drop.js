@@ -1,17 +1,16 @@
 'use strict';
 
 (function () {
-  var myMap = document.querySelector('.map');
-  var myMapWidth = myMap.clientWidth;
+  var myMapWidth = window.utils.myMap.clientWidth;
 
-  var myPinMain = myMap.querySelector('.map__pin--main');
+  var myPinMain = window.utils.myMap.querySelector('.map__pin--main');
   var myPinWidth = myPinMain.clientWidth;
 
   // Функция 'Drag-and-Drop' для главного маркера
   var onMyPinMainMousedown = function (evt) {
     evt.preventDefault();
 
-    if (myMap.classList.contains('map--faded')) {
+    if (window.utils.myMap.classList.contains('map--faded')) {
       window.map.activateMyMap();
     }
 

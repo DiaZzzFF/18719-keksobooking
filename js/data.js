@@ -37,9 +37,8 @@
     'conditioner'
   ];
 
-  var myMap = document.querySelector('.map');
-  var myMapWidth = myMap.clientWidth;
-  var myPinMain = myMap.querySelector('.map__pin--main');
+  var myMapWidth = window.utils.myMap.clientWidth;
+  var myPinMain = window.utils.myMap.querySelector('.map__pin--main');
   var myPinWidth = myPinMain.clientWidth;
 
   // Функция создания массива (photos).
@@ -58,8 +57,8 @@
     var myCards = [];
 
     for (var i = 0; i < NUMBER_OF_CARDS; i++) {
-      var locationX = window.getRandom.getRandomDataRange(0, myMapWidth - myPinWidth);
-      var locationY = window.getRandom.getRandomDataRange(130, 630);
+      var locationX = window.utils.getRandomDataRange(0, myMapWidth - myPinWidth);
+      var locationY = window.utils.getRandomDataRange(130, 630);
 
       myCards[i] = {
         author: {
@@ -67,17 +66,17 @@
         },
 
         offer: {
-          title: window.getRandom.getRandomData(TITLE),
+          title: window.utils.getRandomData(TITLE),
           address: locationX + ', ' + locationY,
-          price: window.getRandom.getRandomDataRange(1000, 1000000),
-          type: window.getRandom.getRandomData(TYPE),
-          rooms: window.getRandom.getRandomDataRange(1, 5),
-          guests: window.getRandom.getRandomDataRange(1, 8),
-          checkin: window.getRandom.getRandomData(PERIOD),
-          checkout: window.getRandom.getRandomData(PERIOD),
-          features: window.getRandom.getRandomLength(FEATURES),
+          price: window.utils.getRandomDataRange(1000, 1000000),
+          type: window.utils.getRandomData(TYPE),
+          rooms: window.utils.getRandomDataRange(1, 5),
+          guests: window.utils.getRandomDataRange(1, 8),
+          checkin: window.utils.getRandomData(PERIOD),
+          checkout: window.utils.getRandomData(PERIOD),
+          features: window.utils.getRandomLength(FEATURES),
           description: '',
-          photos: window.getRandom.getRandomArray(getPhotos())
+          photos: window.utils.getRandomArray(getPhotos())
         },
 
         location: {

@@ -1,8 +1,7 @@
 'use strict';
 
 (function () {
-  var myMap = document.querySelector('.map');
-  var myPins = myMap.querySelector('.map__pins');
+  var myPins = window.utils.myMap.querySelector('.map__pins');
 
   // Функция создания DOM-элемента (метки на карте).
   var createPin = function (pin) {
@@ -15,7 +14,7 @@
 
     // Обработчик для открытия (объявления)
     pinElement.addEventListener('click', function () {
-      window.popup.openPopup(pin);
+      window.utils.openPopup(pin);
     });
 
     return pinElement;
