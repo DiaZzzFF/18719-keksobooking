@@ -4,6 +4,9 @@
   // Количество сгенерированных JS объектов.
   var NUMBER_OF_CARDS = 8;
 
+  // Количество (photos).
+  var NUMBER_OF_PHOTOS = 3;
+
   var TITLE = [
     'Большая уютная квартира',
     'Маленькая неуютная квартира',
@@ -45,7 +48,7 @@
   var getPhotos = function () {
     var myArr = [];
 
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < NUMBER_OF_PHOTOS; i++) {
       myArr[i] = 'http://o0.github.io/assets/images/tokyo/hotel' + (i + 1) + '.jpg';
     }
 
