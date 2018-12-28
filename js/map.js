@@ -41,6 +41,15 @@
     return myAddress;
   };
 
+  // Функция для отрисовки меток на карте вместе с загруженными данными из сервера
+  var getPins = function () {
+    var onLoad = function (data) {
+      window.pin.createPinFragment(data);
+    };
+
+    window.backend.load(onLoad);
+  };
+
   // Функция активации элементов
   var activateMyMap = function () {
     window.utils.myMap.classList.remove('map--faded');
@@ -48,7 +57,7 @@
 
     enableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
 
-    window.pin.createPinFragment();
+    getPins();
 
     calcAddress(MyCoordinates.X, MyCoordinates.Y);
   };

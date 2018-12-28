@@ -21,12 +21,11 @@
   };
 
   // Функция вставки созданных DOM-элементов (метки на карте) в блок.
-  var createPinFragment = function () {
-    var myArr = window.data.createCards();
+  var createPinFragment = function (arr) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < myArr.length; i++) {
-      fragment.appendChild(createPin(myArr[i]));
+    for (var i = 0; i < arr.length; i++) {
+      fragment.appendChild(createPin(arr[i]));
     }
 
     myPins.appendChild(fragment);
