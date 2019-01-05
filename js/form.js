@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var myMain = document.querySelector('main');
   var myAdForm = document.querySelector('.ad-form');
   var myHeadline = myAdForm.querySelector('#title');
   var myTypeOfHousing = myAdForm.querySelector('#type');
@@ -36,15 +37,15 @@
 
     } else if (myTypeOfHousing.value === 'flat') {
       myPricePerNight.setAttribute('min', '1000');
-      myPricePerNight.placeholder = '1 000';
+      myPricePerNight.placeholder = '1000';
 
     } else if (myTypeOfHousing.value === 'house') {
       myPricePerNight.setAttribute('min', '5000');
-      myPricePerNight.placeholder = '5 000';
+      myPricePerNight.placeholder = '5000';
 
     } else if (myTypeOfHousing.value === 'palace') {
       myPricePerNight.setAttribute('min', '10000');
-      myPricePerNight.placeholder = '10 000';
+      myPricePerNight.placeholder = '10000';
     }
   };
 
@@ -83,4 +84,73 @@
 
   myNumbersOfRooms.addEventListener('change', connectsRoomsAndSeats);
   myNumberOfSeats.addEventListener('change', connectsRoomsAndSeats);
+
+  // ----------------------------------------------------------------------------------------------------------
+  // ----------------------------------------------------------------------------------------------------------
+
+  var successHandler = function () {
+    var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successElement = successTemplate.cloneNode(true);
+
+    myMain.appendChild(successElement);
+  };
+
+  var errorHandler = function () {
+    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorElement = errorTemplate.cloneNode(true);
+
+    myMain.appendChild(errorElement);
+  };
+
+  var onLoad = function () {
+    successHandler();
+    openMessagePopup();
+
+    window.map.onMyButtonResetClick();
+  };
+
+  var onError = function () {
+    errorHandler();
+    openMessagePopup();
+
+    window.map.onMyButtonResetClick();
+  };
+
+  var onMyAdFormSubmit = function (evt) {
+    evt.preventDefault();
+
+    window.backend.upload(new FormData(myAdForm), onLoad, onError);
+  };
+
+  myAdForm.addEventListener('submit', onMyAdFormSubmit);
+
+  var onMessagePopupEscPress = function (evt) {
+    if (evt.keyCode === window.utils.ESC_KEYCODE) {
+      closeMessagePopup();
+    }
+
+    document.removeEventListener('keydown', onMessagePopupEscPress);
+  };
+
+  var closeMessagePopup = function () {
+    var mySuccessPopup = document.querySelector('.success');
+    var myErrorPopup = document.querySelector('.error');
+
+    if (mySuccessPopup) {
+      mySuccessPopup.remove();
+
+    } else if (myErrorPopup) {
+      myErrorPopup.remove();
+    }
+
+    var myButtonReset = myAdForm.querySelector('.ad-form__reset');
+
+    document.removeEventListener('click', closeMessagePopup);
+    myButtonReset.addEventListener('click', window.map.onMyButtonResetClick);
+  };
+
+  var openMessagePopup = function () {
+    document.addEventListener('keydown', onMessagePopupEscPress);
+    document.addEventListener('click', closeMessagePopup);
+  };
 })();
