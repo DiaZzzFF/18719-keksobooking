@@ -143,10 +143,8 @@
       myErrorPopup.remove();
     }
 
-    var myButtonReset = myAdForm.querySelector('.ad-form__reset');
-
     document.removeEventListener('click', closeMessagePopup);
-    myButtonReset.addEventListener('click', window.map.onMyButtonResetClick);
+    window.map.myButtonReset.removeEventListener('click', window.map.onMyButtonResetClick);
   };
 
   var openMessagePopup = function () {

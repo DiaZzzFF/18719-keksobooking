@@ -100,6 +100,7 @@
     activateMyMap: activateMyMap,
     calcAddress: calcAddress,
     MyCoordinates: MyCoordinates,
+    myButtonReset: myButtonReset,
     onMyButtonResetClick: onMyButtonResetClick
   };
 })();
