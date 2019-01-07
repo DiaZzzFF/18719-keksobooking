@@ -7,10 +7,9 @@
   var STATUS_CODE = 200;
   var TIMEOUT = 10000; // 10s
 
-  var xhr = new XMLHttpRequest();
-  xhr.responseType = 'json';
+  var getUnifyRequest = function (xhr, onLoad, onError) {
+    xhr.responseType = 'json';
 
-  var getDuplicateCode = function (onLoad, onError) {
     xhr.addEventListener('load', function () {
       if (xhr.status === STATUS_CODE) {
         onLoad(xhr.response);
@@ -35,7 +34,9 @@
 
   // Функция получения (load) данных с сервера
   var load = function (onLoad, onError) {
-    getDuplicateCode(onLoad, onError);
+    var xhr = new XMLHttpRequest();
+
+    getUnifyRequest(xhr, onLoad, onError);
 
     xhr.open('GET', URL_LOAD);
     xhr.send();
@@ -43,7 +44,9 @@
 
   // Функция отправки (upload) данных на сервер
   var upload = function (data, onLoad, onError) {
-    getDuplicateCode(onLoad, onError);
+    var xhr = new XMLHttpRequest();
+
+    getUnifyRequest(xhr, onLoad, onError);
 
     xhr.open('POST', URL_UPLOAD);
     xhr.send(data);
