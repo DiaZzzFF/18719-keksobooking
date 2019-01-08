@@ -8,9 +8,11 @@
     var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
     var pinElement = pinTemplate.cloneNode(true);
 
-    pinElement.style = 'left: ' + pin.location.x + 'px; top: ' + pin.location.y + 'px;';
-    pinElement.querySelector('img').src = pin.author.avatar;
-    pinElement.querySelector('img').alt = pin.offer.title;
+    if (pin.offer) {
+      pinElement.style = 'left: ' + pin.location.x + 'px; top: ' + pin.location.y + 'px;';
+      pinElement.querySelector('img').src = pin.author.avatar;
+      pinElement.querySelector('img').alt = pin.offer.title;
+    }
 
     // Обработчик для открытия (объявления)
     pinElement.addEventListener('click', function () {
@@ -21,12 +23,11 @@
   };
 
   // Функция вставки созданных DOM-элементов (метки на карте) в блок.
-  var createPinFragment = function () {
-    var myArr = window.data.createCards();
+  var createPinFragment = function (arr) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < myArr.length; i++) {
-      fragment.appendChild(createPin(myArr[i]));
+    for (var i = 0; i < arr.length; i++) {
+      fragment.appendChild(createPin(arr[i]));
     }
 
     myPins.appendChild(fragment);

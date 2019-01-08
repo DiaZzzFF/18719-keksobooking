@@ -68,16 +68,45 @@
     var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
     var cardElement = cardTemplate.cloneNode(true);
 
+
     cardElement.querySelector('.popup__title').textContent = card.offer.title;
     cardElement.querySelector('.popup__text--address').textContent = card.offer.address;
     cardElement.querySelector('.popup__text--price').textContent = card.offer.price + ' ₽/ночь';
     cardElement.querySelector('.popup__type').textContent = transformType(card.offer.type);
     cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
     cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ' , выезд до ' + card.offer.checkout;
-    cardElement.replaceChild(createFeatureFragment(card.offer.features), cardElement.querySelector('.popup__features'));
-    cardElement.querySelector('.popup__description').textContent = card.offer.description;
-    cardElement.replaceChild(createPhotoFragment(card.offer.photos), cardElement.querySelector('.popup__photos'));
-    cardElement.querySelector('.popup__avatar').src = card.author.avatar;
+
+    // Проверка наличия (описания)
+    if (card.offer.description) {
+      cardElement.querySelector('.popup__description').textContent = card.offer.description;
+
+    } else {
+      cardElement.querySelector('.popup__description').remove();
+    }
+
+    // Проверка наличия (аватара)
+    if (card.author.avatar) {
+      cardElement.querySelector('.popup__avatar').src = card.author.avatar;
+
+    } else {
+      cardElement.querySelector('.popup__avatar').remove();
+    }
+
+    // Проверка наличия (удобств)
+    if (card.offer.features) {
+      cardElement.replaceChild(createFeatureFragment(card.offer.features), cardElement.querySelector('.popup__features'));
+
+    } else {
+      cardElement.querySelector('.popup__features').remove();
+    }
+
+    // Проверка наличия (фото)
+    if (card.offer.photos) {
+      cardElement.replaceChild(createPhotoFragment(card.offer.photos), cardElement.querySelector('.popup__photos'));
+
+    } else {
+      cardElement.querySelector('.popup__photos').remove();
+    }
 
     // Обработчик для закрытия (объявления)
     cardElement.querySelector('.popup__close').addEventListener('click', window.utils.closePopup);
