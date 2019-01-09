@@ -20,21 +20,21 @@
     Y: Math.round((myMapHeight / 2) + (myPinHeight / 2))
   };
 
-  // Функция для неактивного состояния страницы
+  // Функция для неактивного состояния страницы.
   var disableElements = function (element) {
     for (var i = 0; i < element.length; i++) {
       element[i].setAttribute('disabled', '');
     }
   };
 
-  // Функция для активного состояния страницы
+  // Функция для активного состояния страницы.
   var enableElements = function (element) {
     for (var i = 0; i < element.length; i++) {
       element[i].removeAttribute('disabled');
     }
   };
 
-  // Функция заполнения поля адреса
+  // Функция заполнения поля адреса.
   var calcAddress = function (coordX, coordY) {
     var myAddress = myAdForm.querySelector('input[name="address"]');
 
@@ -43,7 +43,7 @@
     return myAddress;
   };
 
-  // Функция для отрисовки меток на карте вместе с загруженными данными из сервера
+  // Функция для отрисовки (меток на карте) вместе с загруженными данными из сервера.
   var getPins = function () {
     var onLoad = function (data) {
       window.pin.createPinFragment(data);
@@ -56,7 +56,7 @@
     window.backend.load(onLoad, onError);
   };
 
-  // Функция активации элементов
+  // Функция активации элементов.
   var activateMyMap = function () {
     window.utils.myMap.classList.remove('map--faded');
     myAdForm.classList.remove('ad-form--disabled');

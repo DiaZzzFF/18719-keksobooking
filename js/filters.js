@@ -12,6 +12,7 @@
   var myHousingGuests = myFilters.querySelector('#housing-guests');
   var myAllFeatures = myFilters.querySelectorAll('.map__checkbox');
 
+  // Функция фильтрации по (типу жилья).
   var getHousingType = function (card) {
     switch (myHousingType.value) {
       case 'any':
@@ -22,6 +23,7 @@
     }
   };
 
+  // Функция фильтрации по (числу комнат).
   var getHousingRooms = function (card) {
     switch (myHousingRooms.value) {
       case 'any':
@@ -32,6 +34,7 @@
     }
   };
 
+  // Функция фильтрации по (числу гостей).
   var getHousingGuests = function (card) {
     switch (myHousingGuests.value) {
       case 'any':
@@ -42,6 +45,7 @@
     }
   };
 
+  // Функция фильтрации по (диапазону цен).
   var getHousingPrice = function (card) {
     switch (myHousingPrice.value) {
       case 'low':
@@ -58,6 +62,7 @@
     }
   };
 
+  // Функция фильтрации по (выбранным удобствам).
   var getHousingFeatures = function (card) {
     var myResult = true;
 
@@ -70,7 +75,7 @@
     return myResult;
   };
 
-  // функция фильтрующая объявления
+  // Функция вывода всех фильтров одновременно.
   var getMyFilters = function (arr) {
     var myFiltersArr = arr.filter(function (it) {
       return getHousingType(it) && getHousingPrice(it) && getHousingRooms(it) && getHousingGuests(it) && getHousingFeatures(it);

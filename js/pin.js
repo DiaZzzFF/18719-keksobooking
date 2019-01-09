@@ -17,7 +17,7 @@
       pinElement.querySelector('img').alt = pin.offer.title;
     }
 
-    // Обработчик для открытия (объявления)
+    // Обработчик для открытия (объявления).
     pinElement.addEventListener('click', function () {
       window.utils.openPopup(pin);
     });
