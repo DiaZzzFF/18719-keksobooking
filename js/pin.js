@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+  // Количество отрисованных (меток на карте).
+  var NUMBER_OF_PINS = 5;
+
   var myPins = window.utils.myMap.querySelector('.map__pins');
 
   // Функция создания DOM-элемента (метки на карте).
@@ -26,7 +29,7 @@
   var createPinFragment = function (arr) {
     var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < arr.length; i++) {
+    for (var i = 0; i < Math.min(arr.length, NUMBER_OF_PINS); i++) {
       fragment.appendChild(createPin(arr[i]));
     }
 
