@@ -15,34 +15,31 @@
 
   // Функция фильтрации по (типу жилья).
   var getHousingType = function (card) {
-    switch (myHousingType.value) {
-      case 'any':
-        return card;
+    if (myHousingType.value === 'any') {
+      return card;
 
-      default:
-        return card.offer.type === myHousingType.value;
+    } else {
+      return card.offer.type === myHousingType.value;
     }
   };
 
   // Функция фильтрации по (числу комнат).
   var getHousingRooms = function (card) {
-    switch (myHousingRooms.value) {
-      case 'any':
-        return card;
+    if (myHousingRooms.value === 'any') {
+      return card;
 
-      default:
-        return card.offer.rooms === parseInt(myHousingRooms.value, 10);
+    } else {
+      return card.offer.rooms === parseInt(myHousingRooms.value, 10);
     }
   };
 
   // Функция фильтрации по (числу гостей).
   var getHousingGuests = function (card) {
-    switch (myHousingGuests.value) {
-      case 'any':
-        return card;
+    if (myHousingGuests.value === 'any') {
+      return card;
 
-      default:
-        return card.offer.guests === parseInt(myHousingGuests.value, 10);
+    } else {
+      return card.offer.guests === parseInt(myHousingGuests.value, 10);
     }
   };
 
@@ -86,7 +83,7 @@
   };
 
   // Функция добавления приёма «устранение дребезга» (debounce).
-  var onMyAllFiltersChange = window.debounce(function () {
+  var onMyAllFiltersChange = window.utils.debounce(function () {
     window.map.updatePins();
   });
 

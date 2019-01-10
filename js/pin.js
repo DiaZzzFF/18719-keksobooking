@@ -28,8 +28,9 @@
   // Функция вставки созданных DOM-элементов (метки на карте) в блок.
   var createPinFragment = function (arr) {
     var fragment = document.createDocumentFragment();
+    var myPinsLength = Math.min(arr.length, NUMBER_OF_PINS);
 
-    for (var i = 0; i < Math.min(arr.length, NUMBER_OF_PINS); i++) {
+    for (var i = 0; i < myPinsLength; i++) {
       fragment.appendChild(createPin(arr[i]));
     }
 
