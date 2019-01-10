@@ -1,24 +1,16 @@
 'use strict';
 
 (function () {
-  var myMapWidth = window.utils.myMap.clientWidth;
-  var myMapHeight = window.utils.myMap.clientHeight;
-
   var myPinMain = window.utils.myMap.querySelector('.map__pin--main');
-  var myPinHeight = myPinMain.clientHeight;
 
   var myFormFeatures = window.utils.myMap.querySelector('.map__features');
 
   var myAdForm = document.querySelector('.ad-form');
   var myAdFormFieldsets = myAdForm.querySelectorAll('fieldset');
   var myButtonReset = myAdForm.querySelector('.ad-form__reset');
+  var myAddress = myAdForm.querySelector('#address');
 
   var myDataArr = [];
-
-  var MyCoordinates = {
-    X: Math.round(myMapWidth / 2),
-    Y: Math.round((myMapHeight / 2) + (myPinHeight / 2))
-  };
 
   // Функция для неактивного состояния страницы.
   var disableElements = function (element) {
@@ -35,12 +27,23 @@
   };
 
   // Функция заполнения поля адреса.
-  var calcAddress = function (coordX, coordY) {
-    var myAddress = myAdForm.querySelector('input[name="address"]');
+  var calcMyPinMainCoord = function () {
+    return Math.round(myPinMain.offsetLeft) + ', ' + Math.round(myPinMain.offsetTop);
+  };
 
-    myAddress.value = coordX + ', ' + coordY;
+  // Функция заполнения поля адреса (по-умолчанию).
+  var resetMyPinMainCoord = function () {
+    var DEFAULT_PIN_MAIN_COORDINATE_X = 570;
+    var DEFAULT_PIN_MAIN_COORDINATE_Y = 375;
 
-    return myAddress;
+    myPinMain.style = 'left: ' + DEFAULT_PIN_MAIN_COORDINATE_X + 'px; top: ' + DEFAULT_PIN_MAIN_COORDINATE_Y + 'px;';
+
+    myAddress.value = myAddress.placeholder = calcMyPinMainCoord();
+  };
+
+  // Функция заполнения поля адреса для неактивного состояния страницы.
+  var getMyPinMainCoordPassive = function () {
+    myAddress.value = calcMyPinMainCoord();
   };
 
   // Функция, которая обновляет метки на карте при изменении фильтров.
@@ -76,8 +79,6 @@
     getPins();
 
     window.filters.getFiltersAddChange();
-
-    calcAddress(MyCoordinates.X, MyCoordinates.Y);
   };
 
   var removeAllPin = function () {
@@ -87,9 +88,6 @@
   };
 
   var onMyButtonResetClick = function () {
-    var DEFAULT_COORDINATE_X = 570;
-    var DEFAULT_COORDINATE_Y = 375;
-
     window.utils.myMap.classList.add('map--faded');
     myAdForm.classList.add('ad-form--disabled');
 
@@ -99,7 +97,7 @@
     window.filters.myFilters.reset();
     myAdForm.reset();
 
-    myPinMain.style = 'left: ' + DEFAULT_COORDINATE_X + 'px; top: ' + DEFAULT_COORDINATE_Y + 'px;';
+    resetMyPinMainCoord();
 
     window.filters.getFiltersRemoveChange();
 
@@ -111,13 +109,13 @@
   myButtonReset.addEventListener('click', onMyButtonResetClick);
 
   disableElements(myAdFormFieldsets, myFormFeatures);
+  getMyPinMainCoordPassive();
 
   window.map = {
     activateMyMap: activateMyMap,
-    calcAddress: calcAddress,
-    MyCoordinates: MyCoordinates,
     myButtonReset: myButtonReset,
     onMyButtonResetClick: onMyButtonResetClick,
-    updatePins: updatePins
+    updatePins: updatePins,
+    getMyPinMainCoordPassive: getMyPinMainCoordPassive
   };
 })();

@@ -49,23 +49,19 @@
 
       if ((myNewAddress.x >= myMinX) && (myNewAddress.x <= myMaxX)) {
         myPinMain.style.left = myNewAddress.x + 'px';
-
-        window.map.MyCoordinates.X = myNewAddress.x;
       }
 
       if ((myNewAddress.y >= myMinY) && (myNewAddress.y <= myMaxY)) {
         myPinMain.style.top = myNewAddress.y + 'px';
-
-        window.map.MyCoordinates.Y = myNewAddress.y;
       }
 
-      window.map.calcAddress(window.map.MyCoordinates.X, window.map.MyCoordinates.Y);
+      window.map.getMyPinMainCoordPassive();
     };
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      window.map.calcAddress(window.map.MyCoordinates.X, window.map.MyCoordinates.Y);
+      window.map.getMyPinMainCoordPassive();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
