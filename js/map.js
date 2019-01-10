@@ -15,6 +15,8 @@
 
   var myButtonReset = myAdForm.querySelector('.ad-form__reset');
 
+  var myDataArr = [];
+
   var MyCoordinates = {
     X: Math.round(myMapWidth / 2),
     Y: Math.round((myMapHeight / 2) + (myPinHeight / 2))
@@ -43,10 +45,19 @@
     return myAddress;
   };
 
+  // Функция, которая обновляет метки на карте при изменении фильтров.
+  var updatePins = function () {
+    removeAllPin();
+
+    window.pin.createPinFragment(window.filters.getMyFilters(myDataArr));
+  };
+
   // Функция для отрисовки (меток на карте) вместе с загруженными данными из сервера.
   var getPins = function () {
     var onLoad = function (data) {
-      window.pin.createPinFragment(data);
+      myDataArr = data;
+
+      updatePins();
     };
 
     var onError = function () {
@@ -64,6 +75,8 @@
     enableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
 
     getPins();
+
+    window.filters.getFiltersAddChange();
 
     calcAddress(MyCoordinates.X, MyCoordinates.Y);
   };
@@ -83,7 +96,10 @@
 
     disableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
 
+    window.filters.myFilters.reset();
     myAdForm.reset();
+
+    window.filters.getFiltersRemoveChange();
 
     myPinMain.style = 'left: ' + DEFAULT_COORDINATE_X + 'px; top: ' + DEFAULT_COORDINATE_Y + 'px;';
 
@@ -101,6 +117,7 @@
     calcAddress: calcAddress,
     MyCoordinates: MyCoordinates,
     myButtonReset: myButtonReset,
-    onMyButtonResetClick: onMyButtonResetClick
+    onMyButtonResetClick: onMyButtonResetClick,
+    updatePins: updatePins
   };
 })();

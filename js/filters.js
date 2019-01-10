@@ -5,6 +5,7 @@
   var PRICE_HIGH = 50000;
 
   var myFilters = window.utils.myMap.querySelector('.map__filters');
+  var myAllFilters = myFilters.querySelectorAll('.map__filter, .map__checkbox');
 
   var myHousingType = myFilters.querySelector('#housing-type');
   var myHousingPrice = myFilters.querySelector('#housing-price');
@@ -45,7 +46,7 @@
     }
   };
 
-  // Функция фильтрации по (диапазону цен).
+  // Функция фильтрации по (диапазону стоимости).
   var getHousingPrice = function (card) {
     switch (myHousingPrice.value) {
       case 'low':
@@ -84,7 +85,29 @@
     return myFiltersArr;
   };
 
-  window.filters = {
+  // Функция добавления приёма «устранение дребезга» (debounce).
+  var onMyAllFiltersChange = window.debounce(function () {
+    window.map.updatePins();
+  });
 
+  // Функция добавления обработчиков на все элементы формы.
+  var getFiltersAddChange = function () {
+    myAllFilters.forEach(function (it) {
+      it.addEventListener('change', onMyAllFiltersChange);
+    });
+  };
+
+  // Функция удаления обработчиков со всех элементов формы.
+  var getFiltersRemoveChange = function () {
+    myAllFilters.forEach(function (it) {
+      it.removeEventListener('change', onMyAllFiltersChange);
+    });
+  };
+
+  window.filters = {
+    myFilters: myFilters,
+    getMyFilters: getMyFilters,
+    getFiltersAddChange: getFiltersAddChange,
+    getFiltersRemoveChange: getFiltersRemoveChange
   };
 })();
