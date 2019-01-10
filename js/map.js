@@ -7,12 +7,10 @@
   var myPinMain = window.utils.myMap.querySelector('.map__pin--main');
   var myPinHeight = myPinMain.clientHeight;
 
-  var myFormFilter = window.utils.myMap.querySelectorAll('.map__filter');
   var myFormFeatures = window.utils.myMap.querySelector('.map__features');
 
   var myAdForm = document.querySelector('.ad-form');
   var myAdFormFieldsets = myAdForm.querySelectorAll('fieldset');
-
   var myButtonReset = myAdForm.querySelector('.ad-form__reset');
 
   var myDataArr = [];
@@ -72,7 +70,8 @@
     window.utils.myMap.classList.remove('map--faded');
     myAdForm.classList.remove('ad-form--disabled');
 
-    enableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
+    enableElements(myAdFormFieldsets, myFormFeatures);
+    window.filters.enableMyFilters();
 
     getPins();
 
@@ -94,14 +93,15 @@
     window.utils.myMap.classList.add('map--faded');
     myAdForm.classList.add('ad-form--disabled');
 
-    disableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
+    disableElements(myAdFormFieldsets, myFormFeatures);
+    window.filters.disableMyFilters();
 
     window.filters.myFilters.reset();
     myAdForm.reset();
 
-    window.filters.getFiltersRemoveChange();
-
     myPinMain.style = 'left: ' + DEFAULT_COORDINATE_X + 'px; top: ' + DEFAULT_COORDINATE_Y + 'px;';
+
+    window.filters.getFiltersRemoveChange();
 
     window.utils.closePopup();
 
@@ -110,7 +110,7 @@
 
   myButtonReset.addEventListener('click', onMyButtonResetClick);
 
-  disableElements(myAdFormFieldsets, myFormFilter, myFormFeatures);
+  disableElements(myAdFormFieldsets, myFormFeatures);
 
   window.map = {
     activateMyMap: activateMyMap,

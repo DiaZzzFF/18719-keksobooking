@@ -104,10 +104,28 @@
     });
   };
 
+  // Функция для неактивного состояния фильтров.
+  var disableMyFilters = function () {
+    myAllFilters.forEach(function (it) {
+      it.setAttribute('disabled', '');
+    });
+  };
+
+  // Функция для активного состояния фильтров.
+  var enableMyFilters = function () {
+    myAllFilters.forEach(function (it) {
+      it.removeAttribute('disabled');
+    });
+  };
+
+  disableMyFilters();
+
   window.filters = {
     myFilters: myFilters,
     getMyFilters: getMyFilters,
     getFiltersAddChange: getFiltersAddChange,
-    getFiltersRemoveChange: getFiltersRemoveChange
+    getFiltersRemoveChange: getFiltersRemoveChange,
+    disableMyFilters: disableMyFilters,
+    enableMyFilters: enableMyFilters
   };
 })();
