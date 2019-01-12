@@ -11,7 +11,7 @@
   var myNumbersOfRooms = myAdForm.querySelector('#room_number');
   var myNumberOfSeats = myAdForm.querySelector('#capacity');
 
-  // Функция валидации 'Заголовок объявления'
+  // Функция валидации 'Заголовок объявления'.
   var onMyHeadlineInvalid = function () {
     if (myHeadline.validity.tooShort) {
       myHeadline.setCustomValidity('Заголовок объявления должен состоять минимум из 30 символов');
@@ -29,7 +29,7 @@
 
   myHeadline.addEventListener('invalid', onMyHeadlineInvalid);
 
-  // Функция, где поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь»
+  // Функция, где поле «Тип жилья» влияет на минимальное значение поля «Цена за ночь».
   var onMyTypeOfHousingChange = function () {
     if (myTypeOfHousing.value === 'bungalo') {
       myPricePerNight.setAttribute('min', '0');
@@ -51,7 +51,7 @@
 
   myTypeOfHousing.addEventListener('change', onMyTypeOfHousingChange);
 
-  // Поля «Время заезда» и «Время выезда» синхронизированы
+  // Поля «Время заезда» и «Время выезда» синхронизированы.
   myTimeIn.addEventListener('change', function () {
     if (myTimeIn.value !== myTimeOut.value) {
       myTimeOut.value = myTimeIn.value;
@@ -63,7 +63,7 @@
     }
   });
 
-  // Поле «Количество комнат» синхронизировано с полем «Количество мест»
+  // Поле «Количество комнат» синхронизировано с полем «Количество мест».
   var connectsRoomsAndSeats = function () {
     if (myNumbersOfRooms.value === '1' && myNumberOfSeats.value !== '1') {
       myNumberOfSeats.setCustomValidity('Возможные варианты: «для 1 гостя»');
@@ -85,9 +85,7 @@
   myNumbersOfRooms.addEventListener('change', connectsRoomsAndSeats);
   myNumberOfSeats.addEventListener('change', connectsRoomsAndSeats);
 
-  // ----------------------------------------------------------------------------------------------------------
-  // ----------------------------------------------------------------------------------------------------------
-
+  // Функция, которая выводит сообщение об (успешной) отправке данных.
   var successHandler = function () {
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
     var successElement = successTemplate.cloneNode(true);
@@ -95,6 +93,7 @@
     myMain.appendChild(successElement);
   };
 
+  // Функция, которая выводит сообщение об (ошибке) при отправке данных.
   var errorHandler = function () {
     var errorTemplate = document.querySelector('#error').content.querySelector('.error');
     var errorElement = errorTemplate.cloneNode(true);
@@ -102,6 +101,7 @@
     myMain.appendChild(errorElement);
   };
 
+  // Функция обратного вызова, которая срабатывает при (успешном) выполнении запроса.
   var onLoad = function () {
     successHandler();
     openMessagePopup();
@@ -109,6 +109,7 @@
     window.map.onMyButtonResetClick();
   };
 
+  // Функция обратного вызова, которая срабатывает при (неуспешном) выполнении запроса.
   var onError = function () {
     errorHandler();
     openMessagePopup();
@@ -116,6 +117,7 @@
     window.map.onMyButtonResetClick();
   };
 
+  // Функция для отправки данных формы на сервер посредством XHR.
   var onMyAdFormSubmit = function (evt) {
     evt.preventDefault();
 

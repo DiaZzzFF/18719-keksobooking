@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  // Функция вставки созданных DOM-элементов (features) в >>>> createCard()
+  // Функция вставки созданных DOM-элементов (features) в >>>> createCard().
   var createFeatureFragment = function (features) {
     var fragment = document.createDocumentFragment();
 
@@ -16,7 +16,7 @@
     return fragment;
   };
 
-  // Функция вставки созданных DOM-элементов (photos) в >>>> createCard()
+  // Функция вставки созданных DOM-элементов (photos) в >>>> createCard().
   var createPhotoFragment = function (photos) {
     var fragment = document.createDocumentFragment();
 
@@ -35,7 +35,7 @@
     return fragment;
   };
 
-  // Функция превращения текста (TYPE) англ >> рус
+  // Функция превращения текста (TYPE) англ >> рус.
   var transformType = function (type) {
     var myText = '';
 
@@ -76,7 +76,7 @@
     cardElement.querySelector('.popup__text--capacity').textContent = card.offer.rooms + ' комнаты для ' + card.offer.guests + ' гостей';
     cardElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + card.offer.checkin + ' , выезд до ' + card.offer.checkout;
 
-    // Проверка наличия (описания)
+    // Проверка наличия (описания).
     if (card.offer.description) {
       cardElement.querySelector('.popup__description').textContent = card.offer.description;
 
@@ -84,7 +84,7 @@
       cardElement.querySelector('.popup__description').remove();
     }
 
-    // Проверка наличия (аватара)
+    // Проверка наличия (аватара).
     if (card.author.avatar) {
       cardElement.querySelector('.popup__avatar').src = card.author.avatar;
 
@@ -92,7 +92,7 @@
       cardElement.querySelector('.popup__avatar').remove();
     }
 
-    // Проверка наличия (удобств)
+    // Проверка наличия (удобств).
     if (card.offer.features) {
       cardElement.replaceChild(createFeatureFragment(card.offer.features), cardElement.querySelector('.popup__features'));
 
@@ -100,7 +100,7 @@
       cardElement.querySelector('.popup__features').remove();
     }
 
-    // Проверка наличия (фото)
+    // Проверка наличия (фото).
     if (card.offer.photos) {
       cardElement.replaceChild(createPhotoFragment(card.offer.photos), cardElement.querySelector('.popup__photos'));
 
@@ -108,7 +108,7 @@
       cardElement.querySelector('.popup__photos').remove();
     }
 
-    // Обработчик для закрытия (объявления)
+    // Обработчик для закрытия (объявления).
     cardElement.querySelector('.popup__close').addEventListener('click', window.utils.closePopup);
 
     return cardElement;

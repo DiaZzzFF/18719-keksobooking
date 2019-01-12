@@ -1,6 +1,9 @@
 'use strict';
 
 (function () {
+  // Количество отрисованных (меток на карте).
+  var NUMBER_OF_PINS = 5;
+
   var myPins = window.utils.myMap.querySelector('.map__pins');
 
   // Функция создания DOM-элемента (метки на карте).
@@ -14,7 +17,7 @@
       pinElement.querySelector('img').alt = pin.offer.title;
     }
 
-    // Обработчик для открытия (объявления)
+    // Обработчик для открытия (объявления).
     pinElement.addEventListener('click', function () {
       window.utils.openPopup(pin);
     });
@@ -25,8 +28,9 @@
   // Функция вставки созданных DOM-элементов (метки на карте) в блок.
   var createPinFragment = function (arr) {
     var fragment = document.createDocumentFragment();
+    var myPinsLength = Math.min(arr.length, NUMBER_OF_PINS);
 
-    for (var i = 0; i < arr.length; i++) {
+    for (var i = 0; i < myPinsLength; i++) {
       fragment.appendChild(createPin(arr[i]));
     }
 

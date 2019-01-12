@@ -32,7 +32,7 @@
     return xhr;
   };
 
-  // Функция получения (load) данных с сервера
+  // Функция получения (load) данных с сервера.
   var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
@@ -42,7 +42,7 @@
     xhr.send();
   };
 
-  // Функция отправки (upload) данных на сервер
+  // Функция отправки (upload) данных на сервер.
   var upload = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
 
